@@ -11,8 +11,25 @@ import java.util.Map;
  *
  */
 public class DataUtils {
-
-
+	
+	/**
+	 * 封装的json返回工具类
+	 * 
+	 * @param code
+	 * @param msg
+	 * @param data
+	 * @return
+	 */
+	public static Map<String, Object> MyPrint(int code, String msg, Object data) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("code", code);
+		map.put("msg", msg);
+		if (data != null) {
+			map.put("data", data);
+		}
+		return map;
+	}
+	
 	public static Map<String, Object> print(Map<String, Object> data,String code,String msg){
 		data.put("code", code);
 		data.put("msg", msg);
