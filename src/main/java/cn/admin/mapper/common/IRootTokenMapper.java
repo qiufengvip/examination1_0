@@ -24,5 +24,12 @@ public interface IRootTokenMapper extends BaseMapper<rootinfo>{
 	@Select("select * from rootinfo WHERE rootinfo.token = #{token}")
 	public Map<String, Object> queryRootToken(String token);
 	
+	/**
+	 * 刷新管理员token
+	 * @return
+	 */
+	@Update("update rootinfo set token=#{token} where rootinfoid = #{rootinfoid}")
+	public int flushRootToken(@Param("rootinfoid")int rootinfoid,@Param("token")String token);
+	
 
 }
