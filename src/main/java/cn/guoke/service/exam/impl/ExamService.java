@@ -100,7 +100,7 @@ public class ExamService implements IExamService{
 			    	
 			    	
 			    	 List<Map<String, Object>> content = new ArrayList<Map<String,Object>>();  //创建返回的数据 题的信息
-			    	 content.add(getContentS(if(mcp.getAnswer().equals("A")), "A", mcp.getA()));
+//			    	 content.add(getContentS(if(mcp.getAnswer().equals("A")), "A", mcp.getA()));
 			    	 
 			    	
 			    	
