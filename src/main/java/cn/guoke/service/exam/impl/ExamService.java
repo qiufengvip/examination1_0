@@ -100,7 +100,15 @@ public class ExamService implements IExamService{
 			    	
 			    	
 			    	 List<Map<String, Object>> content = new ArrayList<Map<String,Object>>();  //创建返回的数据 题的信息
-//			    	 content.add(getContentS(if(mcp.getAnswer().equals("A")), "A", mcp.getA()));
+			    	 content.add(getContentS(mcp.getAnswer().equals("A")?"true":"false", mcp.getMcqid(), mcp.getA()));
+			    	 content.add(getContentS(mcp.getAnswer().equals("B")?"true":"false", mcp.getMcqid(), mcp.getB()));
+			    	 if (!mcp.getC().equals("no")) {  // 验证是否有选项 c
+				    	 content.add(getContentS(mcp.getAnswer().equals("C")?"true":"false", mcp.getMcqid(), mcp.getC()));
+			    		 if (!mcp.getD().equals("no")) {  // 验证是否有选项 D
+					    	 content.add(getContentS(mcp.getAnswer().equals("D")?"true":"false", mcp.getMcqid(), mcp.getD()));
+						 }
+					 }
+			    	 
 			    	 
 			    	
 			    	
