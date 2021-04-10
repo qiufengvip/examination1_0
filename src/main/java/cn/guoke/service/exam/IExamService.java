@@ -15,7 +15,7 @@ public interface IExamService {
 	 * @param pid
 	 * @return
 	 */
-	public Map< String, Object> getExamPar(Integer pid);
+	public Map< String, Object> getExamPar(String token ,String mark);
 	
 	
 	/**
@@ -47,12 +47,12 @@ public interface IExamService {
 	
 	
 	/**
-	 * @Desc 批改试卷
+	 * @Desc 答题
 	 * @param token
 	 * @param data
 	 * @return
 	 */
-	public Map<String, Object> getCorrect(String token,String data);
+	public Map<String, Object> setGrad(String token,String id,String type,String answer,String code);
 	
 	/**
 	 * @Desc 创建试卷

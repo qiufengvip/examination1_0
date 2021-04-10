@@ -23,6 +23,13 @@ import cn.guoke.pojo.Topic;
  */
 public interface IExamInfoMapper {
 
+	@Select("select * from examination where examinationmark=#{examinationmark}")
+	public Examination getExamByMack(String examinationmark);
+	
+	
+	@Select("select * from  paperinfo where paperid=#{paperid} and topicid=#{topicid} ")
+	public Paperinfo getPaperInfo(@Param("paperid")Integer paperid,@Param("topicid")Integer topid);
+	
 	/*
 	 * @Desc 获取考试
 	 * @param examid
@@ -32,6 +39,14 @@ public interface IExamInfoMapper {
 	public Examination getAnnouncements(Integer examinationid);
 	
 
+	@Select("select * from paper where papercode=#{papercode}")
+	public Paper getPaperByCocde(String papercode); 
+	
+	
+	@Select("select * from paper where paperid=#{paperid}")
+	public Paper getPaperByID(Integer paperid); 
+	
+	
 	/**
 	 * @Desc 创建试卷
 	 * @param paper
@@ -106,6 +121,11 @@ public interface IExamInfoMapper {
 	@Update("UPDATE topic SET display='-1' WHERE topid =#{topid} ")
 	public int delTopicByid(Integer topid);
 	
+	
+
+	// 给题库中增加题目
+	@Insert("insert into answer(sid,answer,paperinfoid) VALUES(#{sid},#{answer},#{paperinfoid})")
+	public int  addAnswer(@Param("sid")Integer sid,@Param("answer")String answer,@Param("paperinfoid")Integer paperinfoid);
 	
 	
 	

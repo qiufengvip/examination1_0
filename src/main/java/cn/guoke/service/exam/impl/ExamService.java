@@ -11,14 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.sym.Name;
+import com.sun.org.apache.regexp.internal.recompile;
 
+import cn.guoke.controller.exam.Exam;
+import cn.guoke.mapper.common.IStuTokenMapper;
 import cn.guoke.mapper.common.ITeaTokenMapper;
 import cn.guoke.mapper.exam.IExamInfoMapper;
 import cn.guoke.mapper.student.IStuExamInfoMapper;
+import cn.guoke.pojo.Examination;
 import cn.guoke.pojo.Faq;
 import cn.guoke.pojo.Mcq;
 import cn.guoke.pojo.Paper;
 import cn.guoke.pojo.Paperinfo;
+import cn.guoke.pojo.Student;
 import cn.guoke.pojo.Teacher;
 import cn.guoke.pojo.Topic;
 import cn.guoke.service.exam.IExamService;
@@ -42,12 +47,88 @@ public class ExamService implements IExamService{
 	@Autowired
 	private ITeaTokenMapper iTeaTokenMapper;
 
-	public Map<String, Object> getExamPar(Integer pid) {
+	
+	  @Autowired 
+	  private IStuTokenMapper iStuTokenMapper;
+	
+	public Map<String, Object> getExamPar(String token ,String mark) {
 		// TODO Auto-generated method stub
+			
+		
+		Map<String, Object> data = new HashMap<String, Object>(); //创建返回的数据
+		//验证字段是否为空
+		if (token==null||token.equals("")) {
+			return DataUtils.print(data, "-1", "请重新登录");
+		}
+		
+		//获取学生信息
+		 Student studnet= iStuTokenMapper.getStuByToken(token);	
+		 if (studnet==null) {  // 这里是验证 token 的
+			 return DataUtils.print(data, "-1", "请重新登录");
+		 }
+		
+
+		//  获取考场 
+		Examination exampa = iExamInfoMapper.getExamByMack(mark);
+		if (exampa==null) {
+			return DataUtils.print(data, "-2", "没有该考场");
+		}
+		Integer pid =exampa.getPaperid();
+		 //获取试卷标题信息
+		 Paper paper = iExamInfoMapper.getPaperByID(pid);
+		
+
+		 //创建
+		 Map<String, Object> dataP = new HashMap<String, Object>(); //创建返回的数据
+		 Map<String, Object> paperInfo = new HashMap<String, Object>(); //创建返回的数据
+		 paperInfo.put("title", paper.getName());  // 试卷
+		 paperInfo.put("info", paper.getInfo());  // 试卷信息
+		 dataP.put("paperInfo", paperInfo);
+		 
+		 
+		 
+		 //根据试卷 id 获取题目 
+		  List<Paperinfo> paperInfoList = iExamInfoMapper.getPaperInfoByPid(pid);
+
+		  List<Map<String, Object>> dataList = new ArrayList<Map<String,Object>>();  //封装说有的试卷
+		  for (Paperinfo paperinfo : paperInfoList) {
+				Map<String, Object> dataMap = new HashMap<String, Object>(); //创建返回的数据 题的信息
+
+			   //获取 题的内容
+			    Integer topicid = paperinfo.getTopicid();
+			    Topic topic = iExamInfoMapper.getTopicByID(topicid);
+			    String topid = topic.getTopid(); //题的id 
+			    String type = topic.getType();
+			    if (type.equals("1")) {  //题的类型 选择题
+					// 获取题目内容
+			    	Mcq mcp = iExamInfoMapper.getMcq(topid);
+			    	dataMap.put("type", "radio");  // 题的类型
+			    	dataMap.put("title",mcp.getMcqcon()); // 题目
+			    	dataMap.put("id", mcp.getMcqid());  // 题的id
+			    	dataMap.put("fraction", topic.getScore()); // 题的分数
+
+			    	 			    	
+				}else if (type.equals("4")) {  //这里是解答题
+					Faq faq = iExamInfoMapper.getFcq(topid);   // 获取解答题
+					//封装的数据 
+					dataMap.put("type", "text");
+					dataMap.put("title", faq.getGfcon());
+					dataMap.put("id", faq.getFaqid());
+					dataMap.put("fraction", topic.getScore());
+					
+					
+				}
+			    
+			   dataList.add(dataMap);    // 封装好试题
+		  }
+		  
+		 
+		
+		  dataP.put("topics", dataList);  //封装试题
+		  data.put("data", dataP);  // 封装所有的
 		
 		
-		
-		return null;
+		return  DataUtils.print(data);
 	}
 
 	/**
@@ -325,6 +406,48 @@ public class ExamService implements IExamService{
    	 contentMap.put("id", id);
    	 contentMap.put("title", title);
    	 return contentMap;
+	}
+
+	
+	
+	
+	
+	@Override
+	public Map<String, Object> setGrad(String token, String id, String type, String answer, String code) {
+		// TODO Auto-generated method stub
+
+		Map<String, Object> data = new HashMap<String, Object>(); //创建返回的数据
+		//验证字段是否为空
+		if (token==null||token.equals("")) {
+			return DataUtils.print(data, "-1", "请重新登录");
+		}
+		
+		//获取学生信息
+		 Student studnet= iStuTokenMapper.getStuByToken(token);	
+		 if (studnet==null) {  // 这里是验证 token 的
+			 return DataUtils.print(data, "-1", "请重新登录");
+		 }
+		 // 获取题的id
+		  Topic topic = iExamInfoMapper.getTopidById(id);
+		  
+		  if (topic==null) {
+			 return DataUtils.print(data, "-2", "没有该试题");
+			
+		 }
+		  Integer topid = topic.getTopicid();
+  		  
+		 //创建  code 成绩
+		  Paper codepare = iExamInfoMapper.getPaperByCocde(code);
+		  Integer pid = codepare.getPaperid(); //试卷的id
+		  
+		  // 获取试卷信息	
+		  Paperinfo paperinfo = iExamInfoMapper.getPaperInfo(pid,topid);
+		  if (paperinfo==null) {
+			  return DataUtils.print(data, "-3", "不是该试卷的题");
+		}
+		  Integer paerinfoid = paperinfo.getPaperid();
+		  iExamInfoMapper.addAnswer(studnet.getSid(),answer,paerinfoid); 
+		  return DataUtils.print(data);
 	}
 	
 }

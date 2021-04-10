@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import cn.guoke.mapper.common.ITeaTokenMapper;
 import cn.guoke.mapper.student.IStuExamInfoMapper;
 import cn.guoke.mapper.teacher.IteaSourseMapper;
+import cn.guoke.pojo.Grade;
 import cn.guoke.pojo.Teacher;
 import cn.guoke.service.teacher.ITeaCoursService;
 import cn.guoke.utils.DataUtils;
+import javafx.geometry.Side;
 
 /**
  * @Desc 获取成绩
@@ -62,6 +64,20 @@ public class TeaCourService implements ITeaCoursService {
 		 
 		iStuExamInfoMapper.addCourse(name , teacher.getTid(), DataUtils.getDataTime()+"");
 		return DataUtils.print(data);
+	}
+
+	@Override
+	public Integer  getGrade(String snumber, String  code,String score) {
+
+		 
+		 
+		 // 获取 学生id
+		  Integer sid = iStuExamInfoMapper.getStuBySnum(snumber).getSid();
+		  //获取试卷 id
+		  Integer pid = iStuExamInfoMapper.getPaperByCode(code).getPaperid();
+		  //成绩
+		   		
+		return iStuExamInfoMapper.addGrde(sid, pid, score);
 	}
 
 	

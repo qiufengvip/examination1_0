@@ -34,5 +34,12 @@ public interface ITeaCoursService {
 	public Map<String, Object> addCourse(String token, String name);
 	
 	
+	/**
+	 * @Desc 增加信息
+	 * @param snumber
+	 * @param token
+	 * @return
+	 */
+	public Integer getGrade(String snumber,String code,String score);
 	
 }

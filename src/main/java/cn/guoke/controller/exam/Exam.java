@@ -28,15 +28,6 @@ public class Exam {
 	private IExamService  iExamService;
 	
 	
-	/**
-	 * @Desc获取试卷信息
-	 * @param pid
-	 * @return
-	 */
-	public Map< String, Object> getStuExam(Integer pid){
-		
-		return null;
-	}
 
 	@RequestMapping("/")
 	public Map<String, Object> setPar(String token,String tips){
@@ -48,4 +39,7 @@ public class Exam {
 	public  Map<String, Object> getExamAcc(String token, String parpercode){
 		return iExamService.getExamAcc(token, parpercode);
 	}
+	
+
+	
 }
