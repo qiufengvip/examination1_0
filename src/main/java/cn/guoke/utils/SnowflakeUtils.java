@@ -9,7 +9,7 @@ import cn.hutool.core.util.IdUtil;
  *
  */
 public class SnowflakeUtils {
-
+	
 	//定义的 
 	private static final  Snowflake SONWFLAKE = IdUtil.getSnowflake(1, 1);
 	

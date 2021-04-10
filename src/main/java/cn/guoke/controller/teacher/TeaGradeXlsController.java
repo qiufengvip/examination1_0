@@ -56,6 +56,10 @@ public class TeaGradeXlsController {
               ExcelReader reader = ExcelUtil.getReader(fdir+"\\"+name+originalFilename);
               List<Map<String,Object>> readAll = reader.readAll();
               System.out.println(readAll);	
+              
+              // 导入数据
+              	
+              
                //coding  
               map.put( "result", "success");  
                 
