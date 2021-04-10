@@ -25,6 +25,13 @@ public interface ITeaCoursService {
 	public Map<String, Object> getGradeMyStu(String token);
 	
 	
+	/**
+	 * @Desc  创建课程
+	 * @param token
+	 * @param name
+	 * @return
+	 */
+	public Map<String, Object> addCourse(String token, String name);
 	
 	
 	

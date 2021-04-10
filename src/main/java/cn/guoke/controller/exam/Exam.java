@@ -43,5 +43,9 @@ public class Exam {
 
 		return iExamService.setPar(token,tips);
 	}
-	
+
+	@RequestMapping("/parper")
+	public  Map<String, Object> getExamAcc(String token, String parpercode){
+		return iExamService.getExamAcc(token, parpercode);
+	}
 }

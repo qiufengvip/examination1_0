@@ -2,6 +2,9 @@ package cn.guoke.mapper.teacher;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import cn.guoke.pojo.Course;
@@ -33,5 +36,9 @@ public interface IteaSourseMapper {
 	 */
 	@Select("SELECT * FROM student WHERE sid in (SELECT sid FROM courseinfo WHERE cid = #{cid})")
 	public List<Student> getStuByCid(Integer cid);
+	
+	@Insert("INSERT INTO course(cname,tid,createtime) VALUES(#{cname},#{tid},#{createtime})")
+	@Options(useGeneratedKeys=true, keyProperty="cid", keyColumn="cid") 
+	public int addCourse(@Param("cname")String cname,@Param("tid")Integer tid,@Param("createtime")String createtime);
 	
 }

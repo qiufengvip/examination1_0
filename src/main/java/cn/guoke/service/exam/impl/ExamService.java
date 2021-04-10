@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.sym.Name;
 import cn.guoke.mapper.common.ITeaTokenMapper;
 import cn.guoke.mapper.exam.IExamInfoMapper;
 import cn.guoke.mapper.student.IStuExamInfoMapper;
+import cn.guoke.pojo.Faq;
 import cn.guoke.pojo.Mcq;
 import cn.guoke.pojo.Paper;
 import cn.guoke.pojo.Paperinfo;
@@ -97,35 +98,42 @@ public class ExamService implements IExamService{
 			    	dataMap.put("title",mcp.getMcqcon()); // 题目
 			    	dataMap.put("id", mcp.getMcqid());  // 题的id
 			    	dataMap.put("fraction", topic.getScore()); // 题的分数
-			    	
+
 			    	
 			    	 List<Map<String, Object>> content = new ArrayList<Map<String,Object>>();  //创建返回的数据 题的信息
-			    	 content.add(getContentS(mcp.getAnswer().equals("A")?"true":"false", mcp.getMcqid(), mcp.getA()));
-			    	 content.add(getContentS(mcp.getAnswer().equals("B")?"true":"false", mcp.getMcqid(), mcp.getB()));
+			    	 content.add(getContentS(mcp.getAnswer().equals("A")?true:false, mcp.getMcqid(), mcp.getA()));
+			    	 content.add(getContentS(mcp.getAnswer().equals("B")?true:false, mcp.getMcqid(), mcp.getB()));
 			    	 if (!mcp.getC().equals("no")) {  // 验证是否有选项 c
-				    	 content.add(getContentS(mcp.getAnswer().equals("C")?"true":"false", mcp.getMcqid(), mcp.getC()));
+				    	 content.add(getContentS(mcp.getAnswer().equals("C")?true:false, mcp.getMcqid(), mcp.getC()));
 			    		 if (!mcp.getD().equals("no")) {  // 验证是否有选项 D
-					    	 content.add(getContentS(mcp.getAnswer().equals("D")?"true":"false", mcp.getMcqid(), mcp.getD()));
+					    	 content.add(getContentS(mcp.getAnswer().equals("D")?true:false, mcp.getMcqid(), mcp.getD()));
 						 }
 					 }
 			    	 
-			    	 
-			    	
-			    	
-				}else if (type.equals("4")) {
+			    	 dataMap.put("content", content);
+			    	 			    	
+				}else if (type.equals("4")) {  //这里是解答题
+					Faq faq = iExamInfoMapper.getFcq(topid);   // 获取解答题
+					//封装的数据 
+					dataMap.put("type", "text");
+					dataMap.put("title", faq.getGfcon());
+					dataMap.put("id", faq.getFaqid());
+					dataMap.put("fraction", topic.getScore());
+					dataMap.put("content", faq.getAnswer());
+					
 					
 				}
 			    
-			   dataList.add(dataMap);  
+			   dataList.add(dataMap);    // 封装好试题
 		  }
-		 
-		 
-		
-		  dataP.put("topics", dataList);
+		  
 		 
 		
+		  dataP.put("topics", dataList);  //封装试题
+		  data.put("data", dataP);  // 封装所有的
+		  
 		
-		return null;
+		return DataUtils.print(data);
 	}
 
 	public Map<String, Object> getStuExamPid(String token, Integer pid) {
@@ -311,7 +319,7 @@ public class ExamService implements IExamService{
 	
 	
 	
-	public  Map<String, Object> getContentS(String checked,String id, String title){
+	public  Map<String, Object> getContentS(Object checked,String id, String title){
    	 Map<String, Object> contentMap = new HashMap<String, Object>(); //创建返回的数据 题的信息	
    	 contentMap.put("checked", checked);
    	 contentMap.put("id", id);

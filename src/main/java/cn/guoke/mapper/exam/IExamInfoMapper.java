@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import cn.guoke.pojo.Examination;
+import cn.guoke.pojo.Faq;
 import cn.guoke.pojo.Mcq;
 import cn.guoke.pojo.Paper;
 import cn.guoke.pojo.Paperinfo;
@@ -92,6 +93,10 @@ public interface IExamInfoMapper {
 	//获取题目内容
 	@Select("select * from mcq where mcqid=#{mcqid}")
 	public Mcq  getMcq(String mcqid);
+	
+	//获取题目内容
+	@Select("select * from faq where faqid=#{faqid}")
+	public Faq  getFcq(String faqid);
 	
 	//删除 题库中的内容
 	@Update("UPDATE topic SET display='-1' WHERE topicid =#{topicid}  ")

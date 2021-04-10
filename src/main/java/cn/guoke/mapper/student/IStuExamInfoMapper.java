@@ -27,7 +27,7 @@ public interface IStuExamInfoMapper extends BaseMapper<Examinationinfo> {
 	
 	
 	/**
-	 * @Desc 获取老师为开始的考试
+	 * @Desc 获取老师开始的考试
 	 * @param tid
 	 * @return
 	 */

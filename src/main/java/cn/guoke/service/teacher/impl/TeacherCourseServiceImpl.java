@@ -42,7 +42,7 @@ public class TeacherCourseServiceImpl implements ITeacherCourseService{
 		if (token==null||token.equals("")) {
 			return DataUtils.print(data, "-1", "请重新登录");
 		}
-		//获取学生信息
+		//获取教师信息
            Teacher teacher = iTeaTokenMapper.getTeaByToken(token);
 		 if (teacher==null) {  // 这里是验证 token 的
 			 return DataUtils.print(data, "-1", "请重新登录");

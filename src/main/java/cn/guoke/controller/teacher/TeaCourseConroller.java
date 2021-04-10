@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.guoke.mapper.student.IStuExamInfoMapper;
+import cn.guoke.service.teacher.ITeaCoursService;
 import cn.guoke.service.teacher.ITeacherCourseService;
 
 /**
@@ -22,6 +24,8 @@ public class TeaCourseConroller {
 
 	@Autowired
 	private ITeacherCourseService iService;
+	@Autowired
+	private ITeaCoursService iTeaCoursService;
 	
 	// 获取基本信息
 	@RequestMapping("/{token}")
@@ -42,6 +46,17 @@ public class TeaCourseConroller {
 		return iService.getAllCourse(token);
 	}
 	
+	
+	/**
+	 * @Desc 添加课程
+	 * @param token
+	 * @param name
+	 * @return
+	 */
+	@RequestMapping("/add")
+	public Map<String, Object> addCourse(String token, String name){
+		return iTeaCoursService.addCourse(token, name);
+	}
 	
 	
 }
